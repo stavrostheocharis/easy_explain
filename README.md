@@ -58,5 +58,3 @@ For any changes you would like to make to this project, we invite you to submit 
 For more information, see [`CONTRIBUTING`](https://github.com/stavrostheocharis/weather_data_retriever/blob/main/CONTRIBUTING.md) instructions.
 
 ## References
-
-1. [How To Create a Python Package for Fetching Weather Data]

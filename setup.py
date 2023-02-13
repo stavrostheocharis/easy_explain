@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name="easy_explain",
     packages=["easy_explain"],
-    version="0.1.5",
+    version="0.1.6",
     license="MIT",
     description="A library that helps to explain AI models in a really quick & easy way",
     author="Stavros Theocharis",

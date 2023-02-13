@@ -5,7 +5,7 @@ long_description=open("README.md", 'r').read()
 setup(
     name="easy_explain",
     packages=["easy_explain"],
-    version="0.1.1",
+    version="0.1.2",
     license="MIT",
     description="A library that helps to explain AI models in a really quick & easy way",
     long_description=long_description,
@@ -13,7 +13,7 @@ setup(
     author="Stavros Theocharis",
     author_email="stavrostheocharis@yahoo.gr",
     url="https://github.com/stavrostheocharis/stavrostheocharis",
-    download_url="https://github.com/stavrostheocharis/easy_explain/archive/refs/tags/v0.1.4.tar.gz",
+    download_url="https://github.com/stavrostheocharis/easy_explain/archive/refs/tags/v0.1.1.tar.gz",
     keywords=[
         "explainable ai",
         "xai",

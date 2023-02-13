@@ -9,7 +9,7 @@ setup(
     author="Stavros Theocharis",
     author_email="stavrostheocharis@yahoo.gr",
     url="https://github.com/stavrostheocharis/stavrostheocharis",
-    download_url="https://github.com/stavrostheocharis/easy_explain/archive/refs/tags/v0.1.1.tar.gz",
+    download_url="https://github.com/stavrostheocharis/easy_explain/archive/refs/tags/v0.1.3.tar.gz",
     keywords=[
         "explainable ai",
         "xai",

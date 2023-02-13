@@ -17,7 +17,7 @@ setup(
     ],  # Keywords that define your package best
     install_requires=["torch", "torchvision", "captum"],  # I get to this in a second
     classifiers=[
-        "Development Status :: Beta",
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Topic :: Software Development :: Build Tools",
         "License :: OSI Approved :: MIT License",

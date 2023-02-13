@@ -63,8 +63,13 @@ def create_attribution(target, model, input_img):
 
     return trans_attribution
 
-def get_prediction_name(predictions):
+def get_prediction_name_from_predictions(predictions):
     name_of_prediction = predictions[0][1]
+    name_of_prediction = name_of_prediction.capitalize().replace('_', ' ')
+    return name_of_prediction
+
+def get_prediction_name_from_labels(labels, target):
+    name_of_prediction = labels[target][1]
     name_of_prediction = name_of_prediction.capitalize().replace('_', ' ')
     return name_of_prediction
 

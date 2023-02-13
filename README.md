@@ -49,5 +49,5 @@ For more information about how to begin have a look at the [examples notebooks](
 We welcome any suggestions, problem reports, and contributions!
 For any changes you would like to make to this project, we invite you to submit an [issue](https://github.com/stavrostheocharis/easy_explain/issues).
 
-For more information, see [`CONTRIBUTING`](https://github.com/stavrostheocharis/weather_data_retriever/blob/main/CONTRIBUTING.md) instructions.
+For more information, see [`CONTRIBUTING`](https://github.com/stavrostheocharis/easy_explain/blob/main/CONTRIBUTING.md) instructions.
 

@@ -2,7 +2,7 @@ from PIL import Image
 from io import BytesIO
 import requests
 from typing import List
-from easy_explain.functions import *
+from functions import *
 
 
 def run_easy_explain(

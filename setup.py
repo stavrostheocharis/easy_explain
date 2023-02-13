@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name="easy_explain",
     packages=["easy_explain"],
-    version="0.1.3",
+    version="0.1.4",
     license="MIT",
     description="A library that helps to explain AI models in a really quick & easy way",
     author="Stavros Theocharis",
@@ -15,7 +15,7 @@ setup(
         "xai",
         "easy explain",
     ],  # Keywords that define your package best
-    install_requires=["torch", "torchvision", "captum"],  # I get to this in a second
+    install_requires=["torch", "torchvision", "captum", "backports.weakref", "backports.lzma"],  # I get to this in a second
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

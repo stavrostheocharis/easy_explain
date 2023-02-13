@@ -1,4 +1,8 @@
 from distutils.core import setup
+from pathlib import Path
+
+this_directory = Path(__file__).parent
+long_description = (this_directory / "README.md").read_text()
 
 setup(
     name="easy_explain",
@@ -6,6 +10,8 @@ setup(
     version="0.1.6",
     license="MIT",
     description="A library that helps to explain AI models in a really quick & easy way",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     author="Stavros Theocharis",
     author_email="stavrostheocharis@yahoo.gr",
     url="https://github.com/stavrostheocharis/stavrostheocharis",

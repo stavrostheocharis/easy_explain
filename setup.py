@@ -5,7 +5,7 @@ long_description = open("README.md", "r").read()
 setup(
     name="easy_explain",
     packages=["easy_explain"],
-    version="0.2.1",
+    version="0.3.0",
     license="MIT",
     description="A library that helps to explain AI models in a really quick & easy way",
     long_description=long_description,

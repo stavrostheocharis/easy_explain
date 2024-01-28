@@ -1,6 +1,6 @@
 from distutils.core import setup
 
-long_description=open("README.md", 'r').read()
+long_description = open("README.md", "r").read()
 
 setup(
     name="easy_explain",
@@ -9,7 +9,7 @@ setup(
     license="MIT",
     description="A library that helps to explain AI models in a really quick & easy way",
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author="Stavros Theocharis",
     author_email="stavrostheocharis@yahoo.gr",
     url="https://github.com/stavrostheocharis/stavrostheocharis",
@@ -19,7 +19,7 @@ setup(
         "xai",
         "easy explain",
     ],  # Keywords that define your package best
-    install_requires=["torch", "torchvision", "captum", "backports.weakref", "backports.lzma"],  # I get to this in a second
+    install_requires=["torch", "torchvision", "captum", "backports.weakref"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

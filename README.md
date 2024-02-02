@@ -2,7 +2,7 @@
  
 # Easy Explain
 
-[![Python Version](https://img.shields.io/badge/python-3.8%20%7C%203.9%20%7C%203.10-green.svg)](#supported-python-versions) 
+[![Python Version](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-green.svg)](#supported-python-versions) 
 [![GitHub][github_badge]][github_link]
 [![PyPI][pypi_badge]][pypi_link]
 [![Download][download_badge]][download_link]
@@ -22,8 +22,8 @@ Unlock the "why" behind your AI models' decisions with `easy-explain`, a Python 
 ## Requirements
 
 ### Python Versions Supported
-- **Primary**: `3.10`
-- **Also Supported**: `3.8`, `3.9`
+- **Primary**: `3.11`
+- **Also Supported**: `3.9`, `3.10`
 
 Ensure one of these Python versions is installed on your system to use `easy-explain`.
 
@@ -58,13 +58,29 @@ Currently, `easy-explain` specializes in two cutting-edge XAI methodologies for 
 To begin unraveling the intricacies of your model's decisions, import and utilize the corresponding classes as follows:
 
 ```python
-from easy_explain.methods.occlusion.occlusion import OcclusionExplain 
+from easy_explain import OcclusionExplain
+
+model = 'your-model'
+
+occlusion_explain = OcclusionExplain(model=model)
+vis_types=[["blended_heat_map", "original_image"]]
+vis_signs = [["positive","all"]]
+
+occlusion_explain.generate_explanation(image_url="your-image",total_preds=5,vis_types = vis_types, vis_signs = vis_signs, labels_path="your-labels-path")
 
 ```
 
 ```python
-from easy_explain.methods.lrp.yolov8.yolo import YOLOv8LRP
+from easy_explain import YOLOv8LRP
 
+model = 'your-model'
+image = 'your-image'
+
+lrp = YOLOv8LRP(model, power=2, eps=1, device='cpu')
+
+explanation_lrp = lrp.explain(image, cls='your-class', contrastive=False).cpu()
+
+lrp.plot_explanation(frame=image, explanation = explanation_lrp, contrastive=True, cmap='seismic', title='Explanation for your class"')
 ```
 
 For more information about how to begin have a look at the [examples notebooks](https://github.com/stavrostheocharis/easy_explain/tree/main/examples).

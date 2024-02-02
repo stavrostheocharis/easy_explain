@@ -19,7 +19,18 @@ setup(
         "xai",
         "easy explain",
     ],  # Keywords that define your package best
-    install_requires=["torch", "torchvision", "captum", "backports.weakref"],
+    install_requires=[
+        "backports.weakref",
+        "captum",
+        "matplotlib",
+        "opencv-python",
+        "Pillow",
+        "scikit-learn",
+        "scipy",
+        "torch",
+        "torchvision",
+        "ultralytics",
+    ],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",

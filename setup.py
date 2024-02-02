@@ -1,10 +1,12 @@
 from distutils.core import setup
+from setuptools import setup, find_packages
+
 
 long_description = open("README.md", "r").read()
 
 setup(
     name="easy_explain",
-    packages=["easy_explain"],
+    packages=find_packages(),
     version="0.4.1",
     license="MIT",
     description="A library that helps to explain AI models in a really quick & easy way",
@@ -18,7 +20,7 @@ setup(
         "explainable ai",
         "xai",
         "easy explain",
-    ],  # Keywords that define your package best
+    ],
     install_requires=[
         "backports.weakref",
         "captum",

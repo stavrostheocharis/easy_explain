@@ -14,6 +14,7 @@ debugpy==1.6.6
 decorator==5.1.1
 executing==1.2.0
 fonttools==4.38.0
+huggingface-hub==0.20.3
 idna==3.4
 importlib-metadata==6.0.0
 ipykernel==6.21.2
@@ -27,7 +28,7 @@ matplotlib-inline==0.1.6
 mypy-extensions==1.0.0
 nest-asyncio==1.5.6
 numpy==1.24.2
-packaging==23.0
+opencv-python==4.9.0.80packaging==23.0
 parso==0.8.3
 pathspec==0.11.0
 pexpect==4.8.0
@@ -43,6 +44,9 @@ pyparsing==3.0.9
 python-dateutil==2.8.2
 pyzmq==25.0.0
 requests==2.28.2
+scikit-learn==1.4.0
+scipy==1.12.0
+
 six==1.16.0
 stack-data==0.6.2
 tomli==2.0.1
@@ -51,6 +55,7 @@ torchvision
 tornado==6.2
 traitlets==5.9.0
 typing-extensions==4.4.0
+ultralytics==8.1.8
 urllib3==1.26.14
 wcwidth==0.2.6
 zipp==3.13.0

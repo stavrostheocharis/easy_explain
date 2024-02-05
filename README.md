@@ -122,6 +122,6 @@ Join us in making AI models more interpretable, transparent, and trustworthy wit
 
 [download_link]: https://pypi.org/project/easy-explain/#files
 
-[licence_badge]: https://img.shields.io/github/license/stavrostheocharis/streamlit-token-craft
+[licence_badge]: https://img.shields.io/github/license/stavrostheocharis/easy-explain
 
 [licence_link]: LICENSE

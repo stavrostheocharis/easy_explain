@@ -9,7 +9,7 @@ from captum.attr import Occlusion
 import json
 from typing import Union, List, Dict, Any
 import itertools
-from easy_explain.methods.occlusion.xai_base import ExplainabilityMethod
+from easy_explain.methods.xai_base import ExplainabilityMethod
 
 
 class OcclusionExplain(ExplainabilityMethod):

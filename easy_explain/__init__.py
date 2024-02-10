@@ -1,3 +1,3 @@
-from .methods import YOLOv8LRP, OcclusionExplain
+from .methods import YOLOv8LRP, OcclusionExplain, CAMExplain
 
-__all__ = ["YOLOv8LRP", "OcclusionExplain"]
+__all__ = ["YOLOv8LRP", "OcclusionExplain", "CAMExplain"]

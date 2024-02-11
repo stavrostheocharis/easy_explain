@@ -1,144 +1,225 @@
 import torch
-from torchvision import transforms
-import matplotlib.pyplot as plt
 from torchcam.methods import SmoothGradCAMpp, LayerCAM
 from torchcam.utils import overlay_mask
+from torchvision import transforms
+import matplotlib.pyplot as plt
+from typing import List, Optional, Dict, Any
+import logging
 from easy_explain.methods.xai_base import ExplainabilityMethod
-from torchvision.transforms.functional import to_pil_image, resize
-from typing import List, Optional, Union
 
 
 class CAMExplain(ExplainabilityMethod):
-    """A class to generate explanations using CAM techniques.
+    def __init__(self, model: torch.nn.Module):
+        self.model = model
+        logging.basicConfig(level=logging.INFO)
 
-    Supports both LayerCAM and SmoothGradCAMpp for generating Class Activation Maps
-    to visualize areas of interest in image inputs that influence model predictions.
-
-    Attributes:
-        model: The model to explain.
-        target_layers: Optional; the layers for which to generate CAMs.
-        cam_type: The type of CAM method to use ('LayerCAM' or 'SmoothGradCAMpp').
-        alpha: Transparency level for the overlay.
-    """
-
-    def __init__(
+    def transform_image(
         self,
-        model,
-        target_layers: Optional[Union[List[str], List[torch.nn.Module]]] = None,
-        cam_type="LayerCAM",
-        alpha=0.5,
-    ):
-        """Initializes the GradCamExplain with a model and CAM configuration."""
-        super().__init__(model)
-        self.alpha = alpha
-        if cam_type == "LayerCAM":
-            # Assuming LayerCAM can be initialized with target layer names
-            self.cam_extractor = LayerCAM(model, target_layers)
-        elif cam_type == "SmoothGradCAMpp":
-            # Assuming SmoothGradCAMpp can also be initialized similarly
-            self.cam_extractor = SmoothGradCAMpp(
-                model, target_layers=target_layers if target_layers else [None]
+        img: torch.Tensor,
+        trans_params: Dict[str, Dict[str, Any]],
+    ) -> torch.Tensor:
+        """
+        Transforms an image using specified resizing and normalization parameters.
+
+        Args:
+            img (Image.Image): The image to transform.
+            trans_params (Dict[str, Dict[str, Any]]): Parameters for resizing and normalization.
+
+        Returns:
+            torch.Tensor: The transformed image tensor.
+        """
+        try:
+            resize_params = trans_params["Resize"]
+            normalize_params = trans_params["Normalize"]
+            input_tensor = transforms.functional.normalize(
+                transforms.functional.resize(
+                    img, (resize_params["h"], resize_params["w"])
+                )
+                / 255.0,
+                normalize_params["mean"],
+                normalize_params["std"],
             )
-        else:
-            raise ValueError(f"Unsupported CAM type: {cam_type}")
+            return input_tensor
 
-    def generate_explanation(
+        except Exception as e:
+            logging.error(f"Error transforming image: {e}")
+            raise
+
+    def get_multiple_layers_result(
         self,
-        img,
-        input_tensor,
-        localisation_mask=False,
-        multiple_layers: Optional[List[str]] = None,
-        **kwargs,
+        img: torch.Tensor,
+        input_tensor: torch.Tensor,
+        layers: List[str],
+        alpha: float,
     ):
-        output = self.model(input_tensor)
-        class_idx = output.squeeze(0).argmax().item()
-        cams = self.cam_extractor(class_idx, output)
+        """
+        Visualizes CAMs for multiple layers and their fused result.
 
-        if multiple_layers:
-            self._handle_multiple_layers(img, input_tensor, multiple_layers)
-        else:
-            self._visualize_cam(cams, img)
+        Args:
+            img (torch.Tensor): The original image tensor.
+            input_tensor (torch.Tensor): The tensor to input to the model.
+            layers (List[str]): List of layer names to visualize CAMs for.
+            alpha (float): Alpha value for blending CAMs on the original image.
+        """
+        try:
+            # Retrieve the CAM from several layers at the same time
+            cam_extractor = LayerCAM(self.model, layers)
+            # Preprocess your data and feed it to the model
+            output = self.model(input_tensor.unsqueeze(0))
+            # Retrieve the CAM by passing the class index and the model output
+            cams = cam_extractor(output.squeeze(0).argmax().item(), output)
+            logging.info("Successfully retrieved CAMs for multiple layers")
 
-        if localisation_mask:
-            self._get_localisation_mask(input_tensor, img)
+            cam_per_layer_list = []
+            # Get the cam per target layer provided
+            for cam in cams:
+                cam_per_layer_list.append(cam.shape)
 
-    def _visualize_cam(self, cams, img):
-        for cam in cams:
+            logging.info(f"The cams per target layer are: {cam_per_layer_list}")
+
+            # Raw CAM
+            _, axes = plt.subplots(1, len(cam_extractor.target_names))
+            for id, name, cam in zip(
+                range(len(cam_extractor.target_names)), cam_extractor.target_names, cams
+            ):
+                axes[id].imshow(cam.squeeze(0).numpy())
+                axes[id].axis("off")
+                axes[id].set_title(name)
+            plt.show()
+
+            fused_cam = cam_extractor.fuse_cams(cams)
+            # Plot the raw version
+            plt.imshow(fused_cam.squeeze(0).numpy())
+            plt.axis("off")
+            plt.title(" + ".join(cam_extractor.target_names))
+            plt.show()
+            # Plot the overlayed version
             result = overlay_mask(
-                img,  # Use directly without conversion
-                transforms.functional.to_pil_image(
-                    cam, mode="F"
-                ),  # Convert CAM tensor to PIL Image
-                alpha=self.alpha,
+                transforms.functional.to_pil_image(img),
+                transforms.functional.to_pil_image(fused_cam, mode="F"),
+                alpha=alpha,
             )
             plt.imshow(result)
             plt.axis("off")
+            plt.title(" + ".join(cam_extractor.target_names))
             plt.show()
+            cam_extractor.remove_hooks()
 
-    def _handle_multiple_layers(self, img, input_tensor, layers: List[str]):
-        cam_extractor = LayerCAM(self.model, layers)
-        output = self.model(input_tensor)
-        class_idx = output.squeeze(0).argmax().item()
-        cams = cam_extractor(class_idx, output)
+        except Exception as e:
+            logging.error(f"Error retrieving CAMs for multiple layers: {e}")
+            raise
 
-        # Visualization of CAMs for each layer
-        _, axes = plt.subplots(1, len(cams))
-        if len(cams) > 1:
-            for ax, cam, layer in zip(axes, cams, cam_extractor.target_names):
-                ax.imshow(cam.squeeze().cpu().numpy(), cmap="jet")
-                ax.axis("off")
-                ax.set_title(layer)
-        else:
-            axes.imshow(cams[0].squeeze().cpu().numpy(), cmap="jet")
-            axes.axis("off")
-            axes.set_title(cam_extractor.target_names[0])
-        plt.show()
+    def get_localisation_mask(self, input_tensor: torch.Tensor, img: torch.Tensor):
+        """
+        Generates and visualizes localization masks based on CAMs.
 
-        # Visualization of fused CAM overlay on the original image
-        fused_cam = cam_extractor.fuse_cams(cams)
-        result = overlay_mask(
-            img,  # Use directly without conversion
-            transforms.functional.to_pil_image(
-                cam, mode="F"
-            ),  # Convert CAM tensor to PIL Image
-            alpha=self.alpha,
-        )
-        plt.imshow(result)
-        plt.axis("off")
-        plt.title("Fused CAM")
-        plt.show()
+        Args:
+            input_tensor (torch.Tensor): The tensor input to the model.
+            img (torch.Tensor): The original image tensor.
+        """
+        try:
+            # Retrieve CAM for differnet layers at the same time
+            cam_extractor = LayerCAM(self.model)
+            output = self.model(input_tensor.unsqueeze(0))
+            cams = cam_extractor(output.squeeze(0).argmax().item(), output)
 
-        # Ensure to remove hooks after processing to clean up
-        cam_extractor.remove_hooks()
+            # Transformations
+            resized_cams = [
+                transforms.functional.resize(
+                    transforms.functional.to_pil_image(cam.squeeze(0)), img.shape[-2:]
+                )
+                for cam in cams
+            ]
+            segmaps = [
+                transforms.functional.to_pil_image(
+                    (
+                        transforms.functional.resize(cam, img.shape[-2:]).squeeze(0)
+                        >= 0.5
+                    ).to(dtype=torch.float32)
+                )
+                for cam in cams
+            ]
 
-    def _get_localisation_mask(self, input_tensor, img):
-        # Assuming LayerCAM is used for localisation mask generation, as per your snippet
-        # If needed, this could be adjusted to support other CAM types
-        output = self.model(input_tensor)
-        class_idx = output.squeeze(0).argmax().item()
-        cams = self.cam_extractor(class_idx, output)
+            # Plots
+            for name, cam, seg in zip(
+                cam_extractor.target_names, resized_cams, segmaps
+            ):
+                _, axes = plt.subplots(1, 2)
+                axes[0].imshow(cam)
+                axes[0].axis("off")
+                axes[0].set_title(name)
+                axes[1].imshow(seg)
+                axes[1].axis("off")
+                axes[1].set_title(name)
+                plt.show()
+            cam_extractor.remove_hooks()
 
-        # Transformations and visualization
-        for cam in cams:
-            resized_cam = resize(to_pil_image(cam.squeeze(0)), img.size[::-1])
-            segmap = to_pil_image(
-                (resize(cam, img.size[::-1]).squeeze(0) >= 0.5).to(torch.float32)
-            )
+        except Exception as e:
+            logging.error(f"Error generating localization masks: {e}")
+            raise
 
-            _, axes = plt.subplots(1, 2, figsize=(10, 5))
-            axes[0].imshow(resized_cam)
-            axes[0].set_title("CAM")
-            axes[0].axis("off")
+    def generate_explanation(
+        self,
+        img: torch.Tensor,
+        input_tensor: torch.Tensor,
+        target_layer: Optional[str] = None,
+        localisation_mask: bool = True,
+        multiple_layers: List[str] = [],
+        alpha=0.5,
+    ):
+        """
+        Extracts and visualizes CAMs for a target layer or multiple layers.
 
-            axes[1].imshow(segmap)
-            axes[1].set_title("Segmentation Map")
-            axes[1].axis("off")
+        Args:
+            img (torch.Tensor): The original image tensor.
+            input_tensor (torch.Tensor): The tensor input to the model.
+            target_layer (Optional[str]): The target layer for CAM visualization.
+            localisation_mask (bool): Whether to generate localization masks.
+            multiple_layers (List[str]): Layers for multi-layer CAM visualization.
+            alpha (float): Alpha value for blending CAMs on the original image.
+        """
+        try:
+            cam_extractor = SmoothGradCAMpp(self.model, target_layer=target_layer)
+            output = self.model(input_tensor.unsqueeze(0))
+            # Get the CAM giving the class index and output
+            cams = cam_extractor(output.squeeze(0).argmax().item(), output)
 
-            plt.show()
+            cam_per_layer_list = []
+            # Get the cam per target layer provided
+            for cam in cams:
+                cam_per_layer_list.append(cam.shape)
 
-        # Cleanup to remove model hooks
-        self.cam_extractor.remove_hooks()
+            logging.info(f"The cams per target layer are: {cam_per_layer_list}")
 
-    def remove_hooks(self):
-        """Remove all the hooks set by the CAM extractor."""
-        self.cam_extractor.remove_hooks()
+            # The raw CAM
+            for name, cam in zip(cam_extractor.target_names, cams):
+                plt.imshow(cam.squeeze(0).numpy())
+                plt.axis("off")
+                plt.title(name)
+                plt.show()
+
+            # Overlayed on the image
+            for name, cam in zip(cam_extractor.target_names, cams):
+                result = overlay_mask(
+                    transforms.functional.to_pil_image(img),
+                    transforms.functional.to_pil_image(cam.squeeze(0), mode="F"),
+                    alpha=alpha,
+                )
+                plt.imshow(result)
+                plt.axis("off")
+                plt.title(name)
+                plt.show()
+
+            cam_extractor.remove_hooks()
+
+            if localisation_mask:
+                self.get_localisation_mask(input_tensor, img)
+
+            if len(multiple_layers) > 0:
+                self.get_multiple_layers_result(
+                    img, input_tensor, multiple_layers, alpha
+                )
+
+        except Exception as e:
+            logging.error(f"Error extracting CAM: {e}")
+            raise

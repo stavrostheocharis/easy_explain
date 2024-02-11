@@ -1,6 +1,5 @@
 import torch
 from scipy.ndimage import zoom
-from sklearn.model_selection import train_test_split
 import numpy as np
 
 
@@ -60,7 +59,6 @@ def scale_mask(mask, shape):
 
 
 class LayerRelevance(torch.Tensor):
-
     """
     LayerRelevance(relevance=None, contrastive=False, print_decimals=5)
 

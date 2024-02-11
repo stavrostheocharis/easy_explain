@@ -7,8 +7,7 @@ import numpy as np
 from captum.attr import visualization as viz
 from captum.attr import Occlusion
 import json
-from typing import Union, List, Dict, Any
-import itertools
+from typing import Union, List, Dict
 from easy_explain.methods.xai_base import ExplainabilityMethod
 
 

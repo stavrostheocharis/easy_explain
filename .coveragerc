@@ -1,0 +1,14 @@
+[run]
+source = easy_explain
+omit =
+    */tests/*
+    */venv/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if self.debug:
+    raise AssertionError
+    raise NotImplementedError
+    if __name__ == .__main__.:

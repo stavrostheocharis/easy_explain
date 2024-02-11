@@ -30,6 +30,7 @@ setup(
         "scikit-learn",
         "scipy",
         "torch",
+        "torchcam",
         "torchvision",
         "ultralytics",
     ],

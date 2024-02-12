@@ -2,13 +2,15 @@
  
 # Easy Explain
 
-[![Python Version](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-green.svg)](#supported-python-versions) 
+
 [![GitHub][github_badge]][github_link]
 [![PyPI][pypi_badge]][pypi_link]
+[![Test][test_passing_badge]][test_passing_badge]
+[![Licence][licence_badge]][licence_link] 
 [![Download][download_badge]][download_link]
 [![Download][total_download_badge]][download_link]
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Licence][licence_badge]][licence_link] 
+[![Python Version](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11-green.svg)](#supported-python-versions)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) 
 
 **Simplify the Explanation of AI Models**
  
@@ -17,7 +19,7 @@
 Unlock the "why" behind your AI models' decisions with `easy-explain`, a Python package designed to democratize access to advanced XAI algorithms. By integrating state-of-the-art explanation techniques with minimal code, we make AI transparency accessible to developers and researchers alike.
 
 > [!IMPORTANT]
-> The new version of `easy-explain` has breaking changes. We have changed the logic of different imports to support more models like YoloV8. Have a look at the provided [examples](https://github.com/stavrostheocharis/easy_explain/tree/main/examples).
+> The new versions of `easy-explain` after 0.4.3 have breaking changes. We have changed the logic of different imports to support more models like YoloV8. Have a look at the provided [examples](https://github.com/stavrostheocharis/easy_explain/tree/main/examples).
 
 
 ## Requirements
@@ -46,10 +48,10 @@ pip install easy-explain
 ## Features and Functionality
 
 `easy-explain` uses under the hood different packages based on the model to be used. [Captum](https://captum.ai/) is used for classification models and it aids to comprehend how the data properties impact the model predictions or neuron activations, offering insights on how the model performs. Captum comes together with [Pytorch library](https://pytorch.org/).
-There are also other customade algorithms to support other models like the LRP implementation for YoloV8.
+There are also other algorithms supported like GradCam or customade algorithms to support other models like the LRP implementation for YoloV8.
 
 
-Currently, `easy-explain` specializes in two cutting-edge XAI methodologies for images:
+Currently, `easy-explain` specializes in specific cutting-edge XAI methodologies for images:
 
 - Occlusion: For deep insight into classification model decisions.
 - Cam: SmoothGradCAMpp & LayerCAM for explainability on image classification models.
@@ -140,6 +142,8 @@ Join us in making AI models more interpretable, transparent, and trustworthy wit
 [pypi_link]: https://pypi.org/project/easy-explain/
 
 [download_badge]: https://static.pepy.tech/personalized-badge/easy-explain?period=month&units=international_system&left_color=grey&right_color=green&left_text=Monthly%20Downloads
+
+[test_passing_badge]: https://github.com/stavrostheocharis/easy_explain/actions/workflows/python-app.yml/badge.svg
 
 [total_download_badge]: https://static.pepy.tech/personalized-badge/easy-explain?period=total&units=international_system&left_color=grey&right_color=green&left_text=Total%20Downloads
 

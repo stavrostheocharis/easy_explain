@@ -132,6 +132,15 @@ Code Contributions: Interested in contributing code? Please refer to our  [`CONT
 
 Join us in making AI models more interpretable, transparent, and trustworthy with `easy-explain`.
 
+## References
+
+1. [easy-explain: Explainable AI for YoloV8](https://pub.towardsai.net/easy-explain-explainable-ai-for-yolov8-bbbf66ff8690)
+2. [easy-explain: Explainable AI with GradCam](https://pub.towardsai.net/easy-explain-explainable-ai-with-gradcam-e187f85a697c)
+3. [easy-explain: Explainable AI for images](https://pub.towardsai.net/easy-explain-explainable-ai-for-images-285777a004e3)
+
+
+
+
 
 [github_badge]: https://badgen.net/badge/icon/GitHub?icon=github&color=black&label
 

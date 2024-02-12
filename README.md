@@ -6,6 +6,7 @@
 [![GitHub][github_badge]][github_link]
 [![PyPI][pypi_badge]][pypi_link]
 [![Download][download_badge]][download_link]
+[![Download][total_download_badge]][download_link]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Licence][licence_badge]][licence_link] 
 
@@ -51,6 +52,7 @@ There are also other customade algorithms to support other models like the LRP i
 Currently, `easy-explain` specializes in two cutting-edge XAI methodologies for images:
 
 - Occlusion: For deep insight into classification model decisions.
+- Cam: SmoothGradCAMpp & LayerCAM for explainability on image classification models.
 - Layer-wise Relevance Propagation (LRP): Specifically tailored for YoloV8 models, unveiling the decision-making process in object detection tasks.
 
 ## Quick Start
@@ -83,6 +85,23 @@ explanation_lrp = lrp.explain(image, cls='your-class', contrastive=False).cpu()
 lrp.plot_explanation(frame=image, explanation = explanation_lrp, contrastive=True, cmap='seismic', title='Explanation for your class"')
 ```
 
+```python
+from easy_explain import YOLOv8LRP
+
+model = 'your-model'
+image = 'your-image'
+
+trans_params = {"ImageNet_transformation":
+  {"Resize": {"h": 224,"w": 224},
+  "Normalize": {"mean": [0.485, 0.456, 0.406], "std": [0.229, 0.224, 0.225]}}}
+
+explainer = CAMExplain(model) 
+
+input_tensor = explainer.transform_image(img, trans_params["ImageNet_transformation"])
+
+explainer.generate_explanation(img, input_tensor, multiple_layers=["a_layer", "another_layer", "another_layer"])
+```
+
 For more information about how to begin have a look at the [examples notebooks](https://github.com/stavrostheocharis/easy_explain/tree/main/examples).
 
 ## Examples
@@ -94,6 +113,8 @@ Explore how `easy-explain` can be applied in various scenarios:
 ![Use Case Example](easy_explain/images/lion-heat-map.png "Use Case Example")
 
 ![Use Case Example](easy_explain/images/siberian-positive.png "Use Case Example")
+
+![Use Case Example](easy_explain/images/jiraffe-cam-method.png "Use Case Example")
 
 ![Use Case Example](easy_explain/images/class-traffic.png "Use Case Example")
 
@@ -118,10 +139,12 @@ Join us in making AI models more interpretable, transparent, and trustworthy wit
 
 [pypi_link]: https://pypi.org/project/easy-explain/
 
-[download_badge]: https://badgen.net/pypi/dm/easy-explain
+[download_badge]: https://static.pepy.tech/personalized-badge/easy-explain?period=month&units=international_system&left_color=grey&right_color=green&left_text=Monthly%20Downloads
+
+[total_download_badge]: https://static.pepy.tech/personalized-badge/easy-explain?period=total&units=international_system&left_color=grey&right_color=green&left_text=Total%20Downloads
 
 [download_link]: https://pypi.org/project/easy-explain/#files
 
-[licence_badge]: https://img.shields.io/github/license/stavrostheocharis/easy-explain
+[licence_badge]: https://img.shields.io/github/license/stavrostheocharis/easy_explain
 
 [licence_link]: LICENSE

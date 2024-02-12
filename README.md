@@ -6,6 +6,7 @@
 [![GitHub][github_badge]][github_link]
 [![PyPI][pypi_badge]][pypi_link]
 [![Download][download_badge]][download_link]
+[![Download][total_download_badge]][download_link]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Licence][licence_badge]][licence_link] 
 
@@ -138,7 +139,9 @@ Join us in making AI models more interpretable, transparent, and trustworthy wit
 
 [pypi_link]: https://pypi.org/project/easy-explain/
 
-[download_badge]: https://badgen.net/pypi/dm/easy-explain
+[download_badge]: https://static.pepy.tech/personalized-badge/easy-explain?period=month&units=international_system&left_color=grey&right_color=green&left_text=Monthly%20Downloads
+
+[total_download_badge]: https://static.pepy.tech/personalized-badge/easy-explain?period=total&units=international_system&left_color=grey&right_color=green&left_text=Total%20Downloads
 
 [download_link]: https://pypi.org/project/easy-explain/#files
 

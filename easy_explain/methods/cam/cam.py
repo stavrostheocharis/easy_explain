@@ -179,7 +179,7 @@ class CAMExplain(ExplainabilityMethod):
             alpha (float): Alpha value for blending CAMs on the original image.
         """
         try:
-            cam_extractor = SmoothGradCAMpp(self.model, target_layer=target_layer)
+            cam_extractor = SmoothGradCAMpp(self.model, target_layer=self.target_layer)
             output = self.model(input_tensor.unsqueeze(0))
             # Get the CAM giving the class index and output
             cams = cam_extractor(output.squeeze(0).argmax().item(), output)
